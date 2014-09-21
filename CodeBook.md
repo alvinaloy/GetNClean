@@ -111,10 +111,10 @@ extAllData <- allData[ , extract_col]
 
 #### Create a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-Again, the average (mean) has already been calculated within the dataset. Simply extract, filter or subset them out. The new dataset is saved in `tidy_data.txt` file.
+Finally the desired result, a `tidyData` data table is created with the average of each measurement per activity/subject combination. The new dataset is saved in `tidy_data.txt` file.
 
 ```
-extract_col2 <- grepl("Activity|Subject|mean", names(extAllData))
-tidyData <- extAllData[ , extract_col2]
+DT <- data.table(extAllData)
+tidyData <- DT[ , lapply(.SD, mean), by = "Activity,Subject"]
 write.table(tidyData, file = "tidy_data.txt", row.names = FALSE)
 ```
