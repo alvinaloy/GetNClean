@@ -1,3 +1,5 @@
+library(data.table)
+
 # 0. load test and training sets and the activities
 
 fileUrl <- "http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
@@ -35,8 +37,6 @@ extract_col <- grepl("Activity|Subject|mean|std", names(allData))
 extAllData <- allData[ , extract_col]
 
 # 5. Create a second, independent tidy data set with the average of each variable for each activity and each subject.
-extract_col2 <- grepl("Activity|Subject|mean", names(extAllData))
-
-tidyData <- extAllData[ , extract_col2]
-
+DT <- data.table(extAllData)
+tidyData <- DT[ , lapply(.SD, mean), by = "Activity,Subject"]
 write.table(tidyData, file = "tidy_data.txt", row.names = FALSE)
